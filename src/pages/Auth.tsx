@@ -74,14 +74,16 @@ const Auth = () => {
             </p>
           </div>
           
-          <div className="w-16 h-16 bg-rock-primary rounded-full flex items-center justify-center mx-auto mb-4">
-            <span className="text-2xl font-bold text-rock-dark">💬</span>
-          </div>
-          <h3 className="text-xl font-bold text-foreground mb-2">Make Offers</h3>
-          <p className="text-muted-foreground">
-            Negotiate prices with our built-in offer system. 
-            Accept, counter, or decline offers.
-          </p>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-rock-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-rock-dark">💬</span>
+              </div>
+              <h3 className="text-xl font-bold text-foreground mb-2">Make Offers</h3>
+              <p className="text-muted-foreground">
+                Negotiate prices with our built-in offer system.
+                Accept, counter, or decline offers.
+              </p>
+            </div>
         </div>
       </div>
     </div>
