@@ -2,14 +2,12 @@ import { Search, Filter, SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-
 const SearchSection = () => {
-  return (
-    <section className="bg-rock-darker py-8">
+  return <section className="bg-rock-darker py-8">
       <div className="container mx-auto px-4">
         <div className="flex flex-col lg:flex-row items-center gap-4 mb-6">
           <div className="flex items-center gap-2 text-rock-primary">
-            <span className="text-lg font-bold">🏠 Home</span>
+            
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 flex-1 max-w-4xl">
@@ -21,10 +19,7 @@ const SearchSection = () => {
             </Button>
             
             <div className="flex-1 relative">
-              <Input 
-                placeholder="Search vinyl records..." 
-                className="bg-rock-card border-rock-border text-foreground placeholder:text-muted-foreground pr-12"
-              />
+              <Input placeholder="Search vinyl records..." className="bg-rock-card border-rock-border text-foreground placeholder:text-muted-foreground pr-12" />
               <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             </div>
             
@@ -53,8 +48,6 @@ const SearchSection = () => {
           </Badge>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default SearchSection;
