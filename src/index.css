@@ -2,41 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Rocktone Marketplace Design System - Hard Rock Aesthetic */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 220 8% 12%;
+    --foreground: 60 9% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 220 13% 18%;
+    --card-foreground: 60 9% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 220 13% 18%;
+    --popover-foreground: 60 9% 98%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 84 81% 60%;
+    --primary-foreground: 220 8% 12%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 220 13% 25%;
+    --secondary-foreground: 60 9% 98%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 220 13% 25%;
+    --muted-foreground: 220 9% 65%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 84 81% 60%;
+    --accent-foreground: 220 8% 12%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 60 9% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 220 13% 25%;
+    --input: 220 13% 25%;
+    --ring: 84 81% 60%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* Rock-themed design tokens */
+    --rock-primary: 84 81% 60%;
+    --rock-primary-glow: 84 81% 70%;
+    --rock-dark: 220 8% 12%;
+    --rock-darker: 220 13% 8%;
+    --rock-card: 220 13% 18%;
+    --rock-border: 220 13% 25%;
+    
+    /* Gradients */
+    --gradient-rock: linear-gradient(135deg, hsl(var(--rock-dark)), hsl(var(--rock-darker)));
+    --gradient-primary: linear-gradient(135deg, hsl(var(--rock-primary)), hsl(var(--rock-primary-glow)));
+    
+    /* Shadows */
+    --shadow-rock: 0 10px 30px -10px hsl(var(--rock-darker) / 0.8);
+    --shadow-glow: 0 0 40px hsl(var(--rock-primary) / 0.3);
+    
+    /* Typography */
+    --font-rock: 'Inter', system-ui, sans-serif;
 
     --sidebar-background: 0 0% 98%;
 
