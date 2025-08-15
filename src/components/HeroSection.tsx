@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
@@ -13,12 +14,14 @@ const HeroSection = () => {
           MARKET
         </h1>
         
-        <Button 
-          size="lg" 
-          className="bg-rock-primary hover:bg-rock-primary-glow text-rock-dark font-bold px-8 py-4 text-lg rounded-full shadow-glow transition-all duration-300 hover:scale-105"
-        >
-          JOIN FOR FREE
-        </Button>
+        <Link to="/auth">
+          <Button 
+            size="lg" 
+            className="bg-rock-primary hover:bg-rock-primary-glow text-rock-dark font-bold px-8 py-4 text-lg rounded-full shadow-glow transition-all duration-300 hover:scale-105"
+          >
+            JOIN FOR FREE
+          </Button>
+        </Link>
       </div>
     </section>
   );

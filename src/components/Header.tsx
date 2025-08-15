@@ -1,8 +1,11 @@
 import { Search, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import { Input } from "@/components/ui/input";
 
 const Header = () => {
+  const { user, signOut } = useAuth();
   return (
     <header className="sticky top-0 z-50 bg-rock-dark/95 backdrop-blur-sm border-b border-rock-border">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -38,6 +41,34 @@ const Header = () => {
             />
             <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           </div>
+          
+          {user ? (
+            <>
+              <span className="text-rock-primary font-medium hidden md:block">
+                Welcome back!
+              </span>
+              <Button 
+                onClick={signOut}
+                variant="ghost" 
+                className="text-rock-primary hover:text-rock-primary-glow"
+              >
+                Sign Out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link to="/auth">
+                <Button variant="ghost" className="text-rock-primary hover:text-rock-primary-glow">
+                  Login
+                </Button>
+              </Link>
+              <Link to="/auth">
+                <Button className="bg-rock-primary hover:bg-rock-primary-glow text-rock-dark font-bold">
+                  Sign Up
+                </Button>
+              </Link>
+            </>
+          )}
           
           <Button size="sm" className="md:hidden">
             <Menu className="h-4 w-4" />
