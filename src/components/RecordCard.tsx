@@ -1,8 +1,11 @@
 import { Heart, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import MakeOfferDialog from "./MakeOfferDialog";
 
 interface RecordCardProps {
+  recordId?: string;
+  sellerId?: string;
   albumName: string;
   artist: string;
   condition: string;
@@ -11,7 +14,7 @@ interface RecordCardProps {
   isRare?: boolean;
 }
 
-const RecordCard = ({ albumName, artist, condition, price, imageUrl, isRare }: RecordCardProps) => {
+const RecordCard = ({ recordId, sellerId, albumName, artist, condition, price, imageUrl, isRare }: RecordCardProps) => {
   return (
     <div className="bg-rock-card rounded-xl p-4 border border-rock-border hover:border-rock-primary/50 transition-all duration-300 hover:shadow-glow group">
       <div className="relative mb-4">
@@ -50,9 +53,19 @@ const RecordCard = ({ albumName, artist, condition, price, imageUrl, isRare }: R
           </div>
         </div>
         
-        <Button className="w-full bg-rock-primary hover:bg-rock-primary-glow text-rock-dark font-bold">
-          MAKE OFFER
-        </Button>
+        {recordId && sellerId ? (
+          <MakeOfferDialog
+            recordId={recordId}
+            sellerId={sellerId}
+            askingPrice={price}
+            albumName={albumName}
+            artist={artist}
+          />
+        ) : (
+          <Button className="w-full bg-rock-primary hover:bg-rock-primary-glow text-rock-dark font-bold">
+            MAKE OFFER
+          </Button>
+        )}
       </div>
     </div>
   );

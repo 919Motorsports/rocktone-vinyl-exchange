@@ -14,6 +14,56 @@ export type Database = {
   }
   public: {
     Tables: {
+      offers: {
+        Row: {
+          amount: number
+          buyer_id: string
+          counter_amount: number | null
+          counter_message: string | null
+          created_at: string
+          id: string
+          message: string | null
+          record_id: string
+          seller_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          buyer_id: string
+          counter_amount?: number | null
+          counter_message?: string | null
+          created_at?: string
+          id?: string
+          message?: string | null
+          record_id: string
+          seller_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          buyer_id?: string
+          counter_amount?: number | null
+          counter_message?: string | null
+          created_at?: string
+          id?: string
+          message?: string | null
+          record_id?: string
+          seller_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "offers_record_id_fkey"
+            columns: ["record_id"]
+            isOneToOne: false
+            referencedRelation: "vinyl_records"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null

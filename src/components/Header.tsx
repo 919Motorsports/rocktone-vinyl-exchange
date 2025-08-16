@@ -44,6 +44,11 @@ const Header = () => {
           
           {user ? (
             <>
+              <Link to="/dashboard">
+                <Button variant="outline" className="border-rock-primary text-rock-primary hover:bg-rock-primary hover:text-rock-dark">
+                  Dashboard
+                </Button>
+              </Link>
               <Link to="/create-listing">
                 <Button className="bg-rock-primary hover:bg-rock-primary-glow text-rock-dark font-bold">
                   Sell Record
