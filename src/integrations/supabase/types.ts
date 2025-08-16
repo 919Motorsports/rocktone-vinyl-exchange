@@ -53,6 +53,59 @@ export type Database = {
         }
         Relationships: []
       }
+      vinyl_records: {
+        Row: {
+          album_name: string
+          artist: string
+          condition: string
+          created_at: string
+          description: string | null
+          genre: string | null
+          id: string
+          images: string[]
+          price: number
+          release_year: number | null
+          seller_id: string
+          updated_at: string
+        }
+        Insert: {
+          album_name: string
+          artist: string
+          condition: string
+          created_at?: string
+          description?: string | null
+          genre?: string | null
+          id?: string
+          images?: string[]
+          price: number
+          release_year?: number | null
+          seller_id: string
+          updated_at?: string
+        }
+        Update: {
+          album_name?: string
+          artist?: string
+          condition?: string
+          created_at?: string
+          description?: string | null
+          genre?: string | null
+          id?: string
+          images?: string[]
+          price?: number
+          release_year?: number | null
+          seller_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vinyl_records_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
