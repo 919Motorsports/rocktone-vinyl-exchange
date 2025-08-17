@@ -64,6 +64,63 @@ export type Database = {
           },
         ]
       }
+      orders: {
+        Row: {
+          buyer_fee: number
+          buyer_id: string
+          created_at: string
+          id: string
+          notes: string | null
+          offer_amount: number
+          payment_intent_id: string | null
+          payment_session_id: string | null
+          record_id: string
+          seller_fee: number
+          seller_id: string
+          shipping_address: Json | null
+          status: string
+          total_amount: number
+          tracking_number: string | null
+          updated_at: string
+        }
+        Insert: {
+          buyer_fee?: number
+          buyer_id: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          offer_amount: number
+          payment_intent_id?: string | null
+          payment_session_id?: string | null
+          record_id: string
+          seller_fee?: number
+          seller_id: string
+          shipping_address?: Json | null
+          status?: string
+          total_amount: number
+          tracking_number?: string | null
+          updated_at?: string
+        }
+        Update: {
+          buyer_fee?: number
+          buyer_id?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          offer_amount?: number
+          payment_intent_id?: string | null
+          payment_session_id?: string | null
+          record_id?: string
+          seller_fee?: number
+          seller_id?: string
+          shipping_address?: Json | null
+          status?: string
+          total_amount?: number
+          tracking_number?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -161,7 +218,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      calculate_transaction_fees: {
+        Args: { offer_amount: number }
+        Returns: {
+          buyer_fee: number
+          seller_fee: number
+          total_amount: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
