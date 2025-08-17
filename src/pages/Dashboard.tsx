@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SellerDashboard from "@/components/SellerDashboard";
 import BuyerOffers from "@/components/BuyerOffers";
 import UserListings from "@/components/UserListings";
+import OrderManagement from "@/components/OrderManagement";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -20,10 +21,11 @@ const Dashboard = () => {
       <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
       
       <Tabs defaultValue="offers" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="offers">Incoming Offers</TabsTrigger>
           <TabsTrigger value="my-offers">My Offers</TabsTrigger>
           <TabsTrigger value="listings">My Listings</TabsTrigger>
+          <TabsTrigger value="orders">Orders</TabsTrigger>
         </TabsList>
         
         <TabsContent value="offers">
@@ -36,6 +38,10 @@ const Dashboard = () => {
         
         <TabsContent value="listings">
           <UserListings />
+        </TabsContent>
+        
+        <TabsContent value="orders">
+          <OrderManagement />
         </TabsContent>
       </Tabs>
     </div>
