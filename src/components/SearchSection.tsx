@@ -11,9 +11,7 @@ const SearchSection = () => {
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 flex-1 max-w-4xl">
-            <Button variant="outline" className="border-rock-border text-foreground hover:text-rock-primary">
-              SORT BY ARTIST
-            </Button>
+            
             <Button variant="outline" className="border-rock-border text-foreground hover:text-rock-primary">
               SORT BY GENRE
             </Button>
