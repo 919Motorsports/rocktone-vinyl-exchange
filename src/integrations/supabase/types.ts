@@ -160,6 +160,59 @@ export type Database = {
         }
         Relationships: []
       }
+      reviews: {
+        Row: {
+          communication_rating: number
+          created_at: string
+          id: string
+          item_accuracy_rating: number
+          order_id: string
+          overall_rating: number
+          review_text: string | null
+          reviewee_id: string
+          reviewer_id: string
+          reviewer_type: string
+          shipping_rating: number
+          updated_at: string
+        }
+        Insert: {
+          communication_rating: number
+          created_at?: string
+          id?: string
+          item_accuracy_rating: number
+          order_id: string
+          overall_rating: number
+          review_text?: string | null
+          reviewee_id: string
+          reviewer_id: string
+          reviewer_type: string
+          shipping_rating: number
+          updated_at?: string
+        }
+        Update: {
+          communication_rating?: number
+          created_at?: string
+          id?: string
+          item_accuracy_rating?: number
+          order_id?: string
+          overall_rating?: number
+          review_text?: string | null
+          reviewee_id?: string
+          reviewer_id?: string
+          reviewer_type?: string
+          shipping_rating?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_order"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vinyl_records: {
         Row: {
           album_name: string
@@ -224,6 +277,16 @@ export type Database = {
           buyer_fee: number
           seller_fee: number
           total_amount: number
+        }[]
+      }
+      get_user_rating_stats: {
+        Args: { user_id: string }
+        Returns: {
+          communication_avg: number
+          item_accuracy_avg: number
+          overall_avg: number
+          shipping_avg: number
+          total_reviews: number
         }[]
       }
     }

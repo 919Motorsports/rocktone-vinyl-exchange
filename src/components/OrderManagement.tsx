@@ -7,7 +7,10 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/components/ui/use-toast";
-import { Package, Truck, CheckCircle, Clock, AlertCircle } from "lucide-react";
+import { Package, Truck, CheckCircle, Clock, AlertCircle, Star } from "lucide-react";
+import { toast as sonnerToast } from "sonner";
+import ReviewForm from "./ReviewForm";
+import ReviewDisplay from "./ReviewDisplay";
 
 interface Order {
   id: string;
@@ -41,12 +44,15 @@ const OrderManagement = () => {
   const [editingOrder, setEditingOrder] = useState<string | null>(null);
   const [trackingNumber, setTrackingNumber] = useState("");
   const [notes, setNotes] = useState("");
+  const [showReviewForm, setShowReviewForm] = useState<string | null>(null);
+  const [existingReviews, setExistingReviews] = useState<Record<string, boolean>>({});
   const { user } = useAuth();
   const { toast } = useToast();
 
   useEffect(() => {
     if (user) {
       fetchOrders();
+      checkExistingReviews();
     }
   }, [user]);
 
@@ -74,6 +80,27 @@ const OrderManagement = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const checkExistingReviews = async () => {
+    if (!user) return;
+
+    try {
+      const { data, error } = await supabase
+        .from("reviews")
+        .select("order_id")
+        .eq("reviewer_id", user.id);
+
+      if (error) throw error;
+
+      const reviewMap: Record<string, boolean> = {};
+      data?.forEach((review) => {
+        reviewMap[review.order_id] = true;
+      });
+      setExistingReviews(reviewMap);
+    } catch (error) {
+      console.error("Error checking existing reviews:", error);
     }
   };
 
@@ -108,6 +135,24 @@ const OrderManagement = () => {
         variant: "destructive",
       });
     }
+  };
+
+  const handleReviewSubmitted = () => {
+    setShowReviewForm(null);
+    checkExistingReviews();
+    sonnerToast.success("Thank you for your review!");
+  };
+
+  const canLeaveReview = (order: Order) => {
+    return order.status === "completed" && !existingReviews[order.id];
+  };
+
+  const getRevieweeId = (order: Order) => {
+    return user?.id === order.buyer_id ? order.seller_id : order.buyer_id;
+  };
+
+  const getReviewerType = (order: Order): "buyer" | "seller" => {
+    return user?.id === order.buyer_id ? "buyer" : "seller";
   };
 
   const getStatusIcon = (status: string) => {
@@ -279,6 +324,41 @@ const OrderManagement = () => {
                           className="bg-green-600 hover:bg-green-700 text-white"
                         >
                           Mark as Completed
+                        </Button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Review Section */}
+              {order.status === "completed" && (
+                <div className="mt-4 pt-4 border-t border-border">
+                  {showReviewForm === order.id ? (
+                    <ReviewForm
+                      orderId={order.id}
+                      revieweeId={getRevieweeId(order)}
+                      reviewerType={getReviewerType(order)}
+                      onReviewSubmitted={handleReviewSubmitted}
+                      onCancel={() => setShowReviewForm(null)}
+                    />
+                  ) : (
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Star className="w-4 h-4 text-primary" />
+                        <span className="text-sm text-foreground">
+                          {existingReviews[order.id] 
+                            ? "You have reviewed this transaction" 
+                            : "Rate your experience"}
+                        </span>
+                      </div>
+                      {canLeaveReview(order) && (
+                        <Button
+                          size="sm"
+                          onClick={() => setShowReviewForm(order.id)}
+                          className="bg-primary text-primary-foreground hover:bg-primary/90"
+                        >
+                          Leave Review
                         </Button>
                       )}
                     </div>
