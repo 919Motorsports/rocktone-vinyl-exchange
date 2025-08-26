@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { CreditCard, Loader2 } from "lucide-react";
+import { CreditCard, Loader2, Crown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { useSubscription } from "@/hooks/useSubscription";
 import FeeCalculator from "./FeeCalculator";
 
 interface PaymentDialogProps {
@@ -24,7 +25,13 @@ interface PaymentDialogProps {
 
 const PaymentDialog = ({ isOpen, onClose, offer }: PaymentDialogProps) => {
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showProComparison, setShowProComparison] = useState(false);
   const { toast } = useToast();
+  const { isPro, createCheckout } = useSubscription();
+
+  const buyerFee = isPro ? 0 : offer.amount * 0.04;
+  const totalAmount = offer.amount + buyerFee;
+  const proMonthlyCost = 9.99;
 
   const handlePayment = async () => {
     setIsProcessing(true);
@@ -74,6 +81,74 @@ const PaymentDialog = ({ isOpen, onClose, offer }: PaymentDialogProps) => {
             </p>
           </div>
 
+          {/* Pro Membership Savings Banner */}
+          {!isPro && (
+            <div className="bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <Crown className="h-5 w-5 text-amber-500 mt-0.5" />
+                <div className="flex-1">
+                  <h5 className="font-medium text-amber-900 mb-1">
+                    Save the 4% buyer fee with Pro—pay ${proMonthlyCost}/mo and this order's fee is $0
+                  </h5>
+                  <div className="text-sm text-amber-800 space-y-1">
+                    <div className="flex justify-between">
+                      <span>Current total: ${totalAmount.toFixed(2)}</span>
+                      <span>With Pro: ${offer.amount.toFixed(2)}</span>
+                    </div>
+                    <div className="font-medium text-amber-900">
+                      You save: ${buyerFee.toFixed(2)} on this order
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setShowProComparison(!showProComparison)}
+                    className="text-sm text-amber-700 underline mt-2"
+                  >
+                    {showProComparison ? "Hide" : "Show"} price comparison
+                  </button>
+                  
+                  {showProComparison && (
+                    <div className="mt-3 p-3 bg-white rounded border border-amber-200">
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <div className="font-medium text-gray-900">Without Pro</div>
+                          <div>Record: ${offer.amount.toFixed(2)}</div>
+                          <div>4% Fee: ${buyerFee.toFixed(2)}</div>
+                          <div className="font-bold border-t pt-1">Total: ${totalAmount.toFixed(2)}</div>
+                        </div>
+                        <div>
+                          <div className="font-medium text-amber-900">With Pro</div>
+                          <div>Record: ${offer.amount.toFixed(2)}</div>
+                          <div>4% Fee: $0.00</div>
+                          <div className="font-bold border-t pt-1">Total: ${offer.amount.toFixed(2)}</div>
+                        </div>
+                      </div>
+                      <Button
+                        onClick={createCheckout}
+                        size="sm"
+                        className="w-full mt-3 bg-amber-500 hover:bg-amber-600 text-white"
+                      >
+                        <Crown className="mr-2 h-4 w-4" />
+                        Upgrade to Pro (${proMonthlyCost}/mo)
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isPro && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div className="flex items-center gap-2">
+                <Crown className="h-5 w-5 text-amber-500" />
+                <span className="font-medium text-green-900">Pro Member - No buyer fees!</span>
+              </div>
+              <p className="text-sm text-green-800 mt-1">
+                You're saving ${buyerFee.toFixed(2)} on this purchase with your Pro membership.
+              </p>
+            </div>
+          )}
+
           <FeeCalculator amount={offer.amount} />
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -108,7 +183,7 @@ const PaymentDialog = ({ isOpen, onClose, offer }: PaymentDialogProps) => {
               ) : (
                 <>
                   <CreditCard className="mr-2 h-4 w-4" />
-                  Pay ${((offer.amount * 1.04).toFixed(2))}
+                  Pay ${totalAmount.toFixed(2)}
                 </>
               )}
             </Button>

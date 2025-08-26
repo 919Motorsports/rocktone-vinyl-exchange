@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useSubscription } from "@/hooks/useSubscription";
 import { useImageUpload } from "@/hooks/useImageUpload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ImageUpload } from "@/components/ImageUpload";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Disc, DollarSign } from "lucide-react";
+import { Disc, DollarSign, Crown, Star } from "lucide-react";
 
 const conditions = [
   'Mint',
@@ -45,6 +46,7 @@ const genres = [
 
 export const CreateListing = () => {
   const { user, loading } = useAuth();
+  const { isPro, createCheckout } = useSubscription();
   const { uploadImages, uploading } = useImageUpload();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -157,6 +159,44 @@ export const CreateListing = () => {
             </CardHeader>
             
             <CardContent>
+              {/* Pro Benefits Banner */}
+              {!isPro && (
+                <div className="mb-6 bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-lg p-4">
+                  <div className="flex items-start gap-3">
+                    <Star className="h-5 w-5 text-amber-500 mt-0.5" />
+                    <div className="flex-1">
+                      <h4 className="font-medium text-amber-900 mb-1">
+                        Pro members: no 4% seller fee + priority placement
+                      </h4>
+                      <p className="text-sm text-amber-800 mb-3">
+                        Stand out from the crowd and keep more of your earnings with Pro membership.
+                      </p>
+                      <Button
+                        type="button"
+                        onClick={createCheckout}
+                        size="sm"
+                        className="bg-amber-500 hover:bg-amber-600 text-white"
+                      >
+                        <Crown className="mr-2 h-4 w-4" />
+                        Try Pro on this listing
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {isPro && (
+                <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4">
+                  <div className="flex items-center gap-2">
+                    <Crown className="h-5 w-5 text-amber-500" />
+                    <span className="font-medium text-green-900">Pro Member Benefits Active</span>
+                  </div>
+                  <p className="text-sm text-green-800 mt-1">
+                    No seller fees • Priority placement • Enhanced visibility
+                  </p>
+                </div>
+              )}
+
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">

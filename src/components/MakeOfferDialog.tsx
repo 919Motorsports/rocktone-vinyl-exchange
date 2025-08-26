@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Crown, Bell } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useSubscription } from "@/hooks/useSubscription";
 import { useToast } from "@/components/ui/use-toast";
 
 interface MakeOfferDialogProps {
@@ -22,6 +24,7 @@ const MakeOfferDialog = ({ recordId, sellerId, askingPrice, albumName, artist }:
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { user } = useAuth();
+  const { isPro, createCheckout } = useSubscription();
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -107,6 +110,41 @@ const MakeOfferDialog = ({ recordId, sellerId, askingPrice, albumName, artist }:
             <p className="text-muted-foreground">by {artist}</p>
             <p className="text-sm text-muted-foreground">Asking price: <span className="font-semibold text-rock-primary">${askingPrice}</span></p>
           </div>
+          
+          {/* Pro member benefits notification */}
+          {!isPro && (
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+              <div className="flex items-start gap-2">
+                <Bell className="h-4 w-4 text-amber-500 mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-sm text-amber-800">
+                    <span className="font-medium">Pro members get instant notifications & featured placement.</span>
+                  </p>
+                  <Button
+                    type="button"
+                    onClick={createCheckout}
+                    size="sm"
+                    className="mt-2 bg-amber-500 hover:bg-amber-600 text-white"
+                  >
+                    <Crown className="mr-1 h-3 w-3" />
+                    Upgrade to Pro
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isPro && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+              <div className="flex items-center gap-2">
+                <Crown className="h-4 w-4 text-amber-500" />
+                <span className="text-sm font-medium text-green-900">Pro Member Benefits Active</span>
+              </div>
+              <p className="text-xs text-green-800 mt-1">
+                You'll get instant notifications and your offers get featured placement!
+              </p>
+            </div>
+          )}
           
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
