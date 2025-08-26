@@ -53,19 +53,24 @@ const RecordCard = ({ recordId, sellerId, albumName, artist, condition, price, i
           </div>
         </div>
         
-        {recordId && sellerId ? (
-          <MakeOfferDialog
-            recordId={recordId}
-            sellerId={sellerId}
-            askingPrice={price}
-            albumName={albumName}
-            artist={artist}
-          />
-        ) : (
-          <Button className="w-full bg-rock-primary hover:bg-rock-primary-glow text-rock-dark font-bold">
-            MAKE OFFER
+        <div className="flex gap-2">
+          {recordId && sellerId ? (
+            <MakeOfferDialog
+              recordId={recordId}
+              sellerId={sellerId}
+              askingPrice={price}
+              albumName={albumName}
+              artist={artist}
+            />
+          ) : (
+            <Button className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold">
+              MAKE OFFER
+            </Button>
+          )}
+          <Button className="flex-1 bg-white hover:bg-gray-50 text-black border border-gray-200 font-bold">
+            BUY NOW
           </Button>
-        )}
+        </div>
       </div>
     </div>
   );

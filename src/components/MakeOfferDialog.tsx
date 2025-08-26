@@ -93,7 +93,7 @@ const MakeOfferDialog = ({ recordId, sellerId, askingPrice, albumName, artist }:
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="w-full bg-rock-primary hover:bg-rock-primary-glow text-rock-dark font-bold">
+        <Button className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold">
           MAKE OFFER
         </Button>
       </DialogTrigger>
