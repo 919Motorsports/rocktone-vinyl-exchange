@@ -1,29 +1,65 @@
+import { useEffect, useState } from "react";
 import RecordCard from "./RecordCard";
-import record1 from "@/assets/record1.jpg";
-import record2 from "@/assets/record2.jpg";
-import record3 from "@/assets/record3.jpg";
-import record4 from "@/assets/record4.jpg";
-import record5 from "@/assets/record5.jpg";
-import record6 from "@/assets/record6.jpg";
+import { supabase } from "@/integrations/supabase/client";
+
+interface VinylRecord {
+  id: string;
+  album_name: string;
+  artist: string;
+  condition: string;
+  price: number;
+  images: string[];
+  seller_id: string;
+  created_at: string;
+  genre?: string;
+}
 
 const MarketplaceSections = () => {
-  const newArrivals = [
-    { albumName: "Classic Thunder", artist: "The Rock Legends", condition: "VG+", price: 45, imageUrl: record1 },
-    { albumName: "Midnight Jazz Sessions", artist: "Blue Note Collective", condition: "NM", price: 67, imageUrl: record2 },
-    { albumName: "Electric Blues", artist: "Lightning Joe", condition: "VG", price: 38, imageUrl: record3 }
-  ];
+  const [newArrivals, setNewArrivals] = useState<VinylRecord[]>([]);
+  const [rareFinds, setRareFinds] = useState<VinylRecord[]>([]);
+  const [featuredArtists, setFeaturedArtists] = useState<VinylRecord[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const rareFinds = [
-    { albumName: "Psychedelic Dreams", artist: "Cosmic Voyagers", condition: "NM", price: 185, imageUrl: record4, isRare: true },
-    { albumName: "Dark Cathedral", artist: "Metal Souls", condition: "VG+", price: 125, imageUrl: record5, isRare: true },
-    { albumName: "Rebellion Rising", artist: "Punk Revolution", condition: "VG", price: 95, imageUrl: record6, isRare: true }
-  ];
+  useEffect(() => {
+    const fetchVinylRecords = async () => {
+      try {
+        const { data: records, error } = await supabase
+          .from('vinyl_records')
+          .select('*')
+          .order('created_at', { ascending: false });
 
-  const featuredArtists = [
-    { albumName: "Greatest Hits Vol. 1", artist: "Rock Icons", condition: "VG+", price: 55, imageUrl: record1 },
-    { albumName: "Smooth Operator", artist: "Jazz Masters", condition: "NM", price: 72, imageUrl: record2 },
-    { albumName: "Blues Highway", artist: "Delta Kings", condition: "VG+", price: 48, imageUrl: record3 }
-  ];
+        if (error) throw error;
+
+        if (records) {
+          // New Arrivals: Most recent 3 records
+          setNewArrivals(records.slice(0, 3));
+          
+          // Rare Finds: Records with price > $100
+          setRareFinds(records.filter(record => record.price > 100).slice(0, 3));
+          
+          // Featured Artists: Random selection of remaining records
+          const remaining = records.slice(3);
+          setFeaturedArtists(remaining.slice(0, 3));
+        }
+      } catch (error) {
+        console.error('Error fetching vinyl records:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVinylRecords();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="bg-background py-12">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-muted-foreground">Loading vinyl records...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-background py-12 space-y-16">
@@ -31,30 +67,67 @@ const MarketplaceSections = () => {
       <section className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-foreground mb-8">New Arrivals</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {newArrivals.map((record, index) => (
-            <RecordCard key={index} {...record} />
+          {newArrivals.map((record) => (
+            <RecordCard 
+              key={record.id}
+              albumName={record.album_name}
+              artist={record.artist}
+              condition={record.condition}
+              price={record.price}
+              imageUrl={record.images[0] || '/placeholder.svg'}
+              recordId={record.id}
+              sellerId={record.seller_id}
+            />
           ))}
         </div>
+        {newArrivals.length === 0 && (
+          <p className="text-center text-muted-foreground">No new arrivals yet.</p>
+        )}
       </section>
 
       {/* Rare Finds */}
       <section className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-foreground mb-8">Rare Finds</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {rareFinds.map((record, index) => (
-            <RecordCard key={index} {...record} />
+          {rareFinds.map((record) => (
+            <RecordCard 
+              key={record.id}
+              albumName={record.album_name}
+              artist={record.artist}
+              condition={record.condition}
+              price={record.price}
+              imageUrl={record.images[0] || '/placeholder.svg'}
+              recordId={record.id}
+              sellerId={record.seller_id}
+              isRare={true}
+            />
           ))}
         </div>
+        {rareFinds.length === 0 && (
+          <p className="text-center text-muted-foreground">No rare finds available.</p>
+        )}
       </section>
 
       {/* Featured Artists */}
       <section className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-foreground mb-8">Featured Artists</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featuredArtists.map((record, index) => (
-            <RecordCard key={index} {...record} />
+          {featuredArtists.map((record) => (
+            <RecordCard 
+              key={record.id}
+              albumName={record.album_name}
+              artist={record.artist}
+              condition={record.condition}
+              price={record.price}
+              imageUrl={record.images[0] || '/placeholder.svg'}
+              recordId={record.id}
+              sellerId={record.seller_id}
+            />
           ))}
         </div>
+        {featuredArtists.length === 0 && (
+          <p className="text-center text-muted-foreground">No featured artists available.</p>
+        )}
       </section>
 
       {/* Marketplace Info */}
